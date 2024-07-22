@@ -116,4 +116,16 @@ void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 2 */
 
+// This function is called after device wake-up from deep sleep to restore the pin configuration
+// update it in regard of your setup.
+void stm32l_lowPowerRestoreGpioConfig() {
+
+
+	  /* GPIO Ports Clock Enable */
+	  __HAL_RCC_GPIOA_CLK_ENABLE();
+	  __HAL_RCC_GPIOB_CLK_ENABLE();
+	  __HAL_RCC_GPIOC_CLK_ENABLE();
+	  __HAL_RCC_GPIOH_CLK_ENABLE();
+
+}
 /* USER CODE END 2 */

@@ -27,7 +27,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+	#include <it_sdk/config.h>
+	#include <it_sdk/itsdk.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,7 +99,7 @@ int main(void)
   MX_SUBGHZ_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-
+  itsdk_setup();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -108,6 +109,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	itsdk_loop();
   }
   /* USER CODE END 3 */
 }

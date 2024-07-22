@@ -1,0 +1,231 @@
+/* ==========================================================
+ * configSigfox.h - SDK Configuration file for Sigfox communication
+ * Project : Disk91 SDK
+ * ----------------------------------------------------------
+ * Created on: 4 nov. 2018
+ *     Author: Paul Pinault aka Disk91
+ * ----------------------------------------------------------
+ * Copyright (C) 2018 Disk91
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU LESSER General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Lesser Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * ----------------------------------------------------------
+ * S2LP:
+ *    In cube MX declare the CSn and SDN pin as output.
+ *      CSn is pullup set to High initially
+ *      SDN is set to low initially (no shutdown)
+ *    Declare SPI. default configuration normally match.
+ *
+ * ==========================================================
+ */
+
+#ifndef IT_SDK_CONFIG_SIGFOX_H_
+#define IT_SDK_CONFIG_SIGFOX_H_
+
+#include <it_sdk/config_defines.h>
+#if ITSDK_SIGFOX_LIB == __SIGFOX_S2LP || ITSDK_SIGFOX_LIB == __SIGFOX_SX1276
+	#include "spi.h"
+	#include <it_sdk/sigfox/sigfox.h>
+#endif
+
+#if ITSDK_SIGFOX_LIB == __SIGFOX_SX126X
+	#include "subghz.h"
+	#include <it_sdk/sigfox/sigfox.h>
+#endif
+
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// | SDK SETTING                   | USER SELECTED VALUE                  | SETTING DESCRIPTION                   |
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +------------SIGFOX-------------|--------------------------------------|---------------------------------------|
+#if ITSDK_WITH_SIGFOX_LIB == __ENABLE
+#define ITSDK_SIGFOX_ENCRYPTION		(   __PAYLOAD_ENCRYPT_NONE          \
+  									  | __PAYLOAD_ENCRYPT_AESCTR 		\
+									  | __PAYLOAD_ENCRYPT_SPECK 		\
+								/*	  | __PAYLOAD_ENCRYPT_SIGFOX   */   \
+									)										// Encryption code activated
+
+#define ITSDK_SIGFOX_MEM_SIZE		256										// Static memory allocated to sigfox
+#define ITSDK_SIGFOX_NVM_SOURCE		__SFX_NVM_LOCALEPROM					// where the non volatile information are stored
+																			// __SFX_NVM_LOCALEPROM for local storage
+
+#define ITSDK_SIGFOX_NVM_BASEADDR	0x600									// Base address in the NVM for sigfox lib
+#define ITSDK_SIGFOX_NVM_IDBASEADDR	0x200									// Base address in the NVM for EncUtils lib
+#define ITSDK_SIGFOX_LOWPOWER		0										// When 1 the device can be switch to low power by the sigfox lib
+#define ITSDK_SIGFOX_ID				0x01020304								// The device ID when NVM_SOURCE is HEADERS
+#define ITSDK_SIGFOX_PAC			{ 0x00, 0x00, 0x00, 0x00, \
+									  0x00, 0x00, 0x00, 0x00 }				// The device PAC when NVM_SOURCE is HEADERS
+#define ITSDK_SIGFOX_KEY_TYPE		SIGFOX_KEY_PRIVATE						// Type of key to be used SIGFOX_KEY_PRIVATE / SIGFOX_KEY_PUBLI	
+#define ITSDK_SIGFOX_TXPOWER		SIGFOX_DEFAULT_POWER					// Default Tx power in dB - can be replaced by a value in dB	
+#define ITSDK_SIGFOX_MAXPOWER		ITSDK_RADIO_MAX_OUTPUT_DBM				// Max power for the board (the stack returns send error when 
+																			// power higher than stack supports
+#define ITSDK_SIGFOX_SPEED			SIGFOX_DEFAULT_SPEED					// Default Speed in bps - can be replaced by a value in BPS		
+#define ITSDK_SIGFOX_RSSICAL		0										// Rssi calibration Offset
+#define ITSDK_SIGFOX_FREQOFFSET		0										// Frequency Offset
+#define ITSDK_SIGFOX_LBTOFFSET		0										// Listen Before Talk Offset
+#define ITSDK_SIGFOX_N				3										// Frame repeat (only applicable to SX126X driver currently)
+#define ITSDK_SIGFOX_ROLLOVER		4096									// SeqId roll-over counter (sx126x applicable)
+
+#define ITSDK_SIGFOX_IF_TX_RCZ1	 	500										// Interframe time for TX Frame
+#define ITSDK_SIGFOX_IF_TX_RCZ3	 	50										// Interframe time for TX Frame
+#define ITSDK_SIGFOX_IF_TXRX_RCZ1 	500										// Interframe time for TX/RX frame
+#define ITSDK_SIGFOX_IF_TXRX_RCZ3 	50										// Interframe time for TX/RX frame
+
+#define ITSDK_SIGFOX_DWNCNF_DELAY	2000									// Delay in Ms between downlink reception and OOB frame confirmation
+																			// SX126x applicable
+
+#define ITSDK_SIGFOX_SUPORTEDZONE	__SIGFOX_ALL							// Supports all zone (some driver have optim for only ETSI or FCC ...
+
+#define ITSDK_SIGFOX_KEY			{ 0x00, 0x11, 0x22, 0x33, \
+									  0x44, 0x55, 0x66, 0x77, \
+									  0x88, 0x99, 0xAA, 0xBB, \
+									  0xCC, 0xDD, 0xEE, 0xFF }				// The device KEY when NVM_SOURCE is HEADERS
+																			// The Key is in clear here
+#define ITSDK_SIGFOX_KEY_PUBLIC		{ 0x00, 0x11, 0x22, 0x33, \
+	                                  0x44, 0x55, 0x66, 0x77, \
+                                      0x88, 0x99, 0xAA, 0xBB, \
+									  0xCC, 0xDD, 0xEE, 0xFF }				// The sigfox PUBLIC key (do not change this)		
+	
+#endif
+// +---------------S2LP------------|--------------------------------------|---------------------------------------|
+#if ITSDK_SIGFOX_LIB == __SIGFOX_S2LP
+#define ITSDK_SIGFOX_EXTENSIONS	    __SIGFOX_MONARCH			   		   // Customize the sigfox lib (be careful as there is a link with precompiled library)
+#define ITSDK_S2LP_SPI				hspi1								   // SPI To BE USED
+																		   // SPI Configured by CubeMX
+																		   //  Master, 8b, Polarity Low,
+																		   //  first bit msb, CRC disable...
+#define ITSDK_S2LP_TARGET			__S2LP_HT32SX						   // Target sub platform
+
+#define ITSDK_S2LP_OPTIMIZE_RAM		__ENABLE							   // In some internal processing RAM of Flash optimization wil be prefered
+
+
+#define ITSDK_S2LP_CS_BANK			 __BANK_A							   // S2LP Chip Select PIN LAYOUT (Activ Low)
+#define ITSDK_S2LP_CS_PIN			 __LP_GPIO_1
+#define ITSDK_S2LP_SDN_BANK			 __BANK_A							   // S2LP Chip Shutdown PIN LAYOUT (Activ High)
+#define ITSDK_S2LP_SDN_PIN			 __LP_GPIO_8
+#define ITSDK_S2LP_GPIO0_BANK		 __BANK_A							   // S2LP Interrupt GPIO0 LAYOUT
+#define ITSDK_S2LP_GPIO0_PIN		 __LP_GPIO_0						   //   Default PA0 <=> GPIO0 on S2LP
+#define ITSDK_S2LP_GPIO1_BANK		 __BANK_A							   // S2LP Interrupt GPIO1 LAYOUT
+#define ITSDK_S2LP_GPIO1_PIN		 __LP_GPIO_4						   //   Default PA4 <=> GPIO1 on S2LP
+																		   //   Configured as input
+#define ITSDK_S2LP_GPIO2_BANK		 __BANK_B							   // S2LP Interrupt GPIO2 LAYOUT
+#define ITSDK_S2LP_GPIO2_PIN		 __LP_GPIO_0						   //   Default PB0 <=> GPIO2 on S2LP
+																		   //   Configured as input
+#define ITSDK_S2LP_GPIO3_BANK		 __BANK_C							   // S2LP Interrupt GPIO3 LAYOUT
+#define ITSDK_S2LP_GPIO3_PIN		 __LP_GPIO_0						   //   Default PC0 <=> GPIO3 on S2LP
+																		   //   Configured as Rising with pull-down
+#define ITSDK_S2LP_INTERRUPT_BANK	ITSDK_S2LP_GPIO0_BANK				   // GPIO used as Interrupt
+#define ITSDK_S2LP_INTERRUPT_PIN	ITSDK_S2LP_GPIO0_PIN	
+
+#define ITSDK_S2LP_CNF_TCX0			__S2LP_W_O_TCXO					   	   // Absence of a TCXO
+#define ITSDK_S2LP_CNF_RANGE		__SIGFOX_S2LP_PA_NONE				   // PA configuration
+#define ITSDK_S2LP_CNF_BAND			3
+#define ITSDK_S2LP_CNF_FREQ			50000000							   // TCXO Frequency
+#define ITSDK_S2LP_CNF_OFFSET		ITSDK_SIGFOX_FREQOFFSET
+#define ITSDK_S2LP_CNF_MONARCH_G	__S2LP_FIFO_RX						   // Config GPIO Sampling vs FIFO for Monarch
+
+#endif //__SIGFOX_S2LP
+// +------------MURATA------------|--------------------------------------|---------------------------------------|
+#if ITSDK_SIGFOX_LIB == __SIGFOX_SX1276
+#ifndef ITSDK_SX1276_SPI												   // if not yet defined in configLoRaWan
+#define ITSDK_SX1276_SPI			hspi1								   // SPI To BE USED
+																		   // SPI Configured by CubeMX
+																		   //  Master, 8b, Polarity Low,
+																		   //  first bit msb, CRC disable...
+#define ITSDK_SX1276_TIM_ID			2								   	   // Timer used => Should not be changed
+																		   // Need to b activated in the CubeMx project
+#define ITSDK_SX1276_SPIDMATX		hdma_spi1_tx						   // Associated DMA
+#ifndef ITSDK_MURATA_TCXO_WARMUP
+#define ITSDK_MURATA_TCXO_WARMUP	50									   // Warmup time for TCXO
+#define ITSDK_MURATA_WAKEUP_TIME    53 									   // WakeUp time correction for RX window start at least TCXO Time [ms]
+#endif
+#define ITSDK_SX1276_SFXWAKEUP_TIME 60 								   	   // WakeUp time correction interframe timing (includes TCXO)
+#ifndef ITSDK_RADIO_MAX_OUTPUT_DBM
+#define ITSDK_RADIO_MAX_OUTPUT_DBM	20									   // Maximum power oputput for this chip
+#endif
+
+#define ITSDK_SX1276_RESET_BANK		 		__BANK_C					   // SX1276 GPIO FOR RESET
+#define ITSDK_SX1276_RESET_PIN		 		__LP_GPIO_0
+#define ITSDK_SX1276_NSS_BANK		 		__BANK_A					   // SX1276 GPIO FOR Activating Low Slave Select NSS
+#define ITSDK_SX1276_NSS_PIN		 		__LP_GPIO_15
+#define ITSDK_SX1276_TCXO_VCC_BANK	 		__BANK_A					   // SX1276 GPIO FOR Activating TCXO
+#define ITSDK_SX1276_TCXO_VCC_PIN	 		__LP_GPIO_12
+#define ITSDK_SX1276_DIO_0_BANK	 	 		__BANK_B					   // SX1276 GPIO 0 => Rx/Tx Done interrupt
+#define ITSDK_SX1276_DIO_0_PIN	 	 		__LP_GPIO_4
+#define ITSDK_SX1276_DIO_1_BANK	 	 		__BANK_B					   // SX1276 GPIO 1 => Rx Timeout interrupt
+#define ITSDK_SX1276_DIO_1_PIN	 	 		__LP_GPIO_1
+#define ITSDK_SX1276_DIO_2_BANK	 	 		__BANK_B					   // SX1276 GPIO 2 => Fhss Change channel
+#define ITSDK_SX1276_DIO_2_PIN	 	 		__LP_GPIO_0
+#define ITSDK_SX1276_DIO_3_BANK	 	 		__BANK_C					   // SX1276 GPIO 3 => cadDone/ValidHeader/Crc Error
+#define ITSDK_SX1276_DIO_3_PIN	 	 		__LP_GPIO_13
+#define ITSDK_SX1276_DIO_4_BANK	 	 		__BANK_A					   // SX1276 GPIO 4 => CAD Detected / Pll lock
+#define ITSDK_SX1276_DIO_4_PIN	 	 		__LP_GPIO_5
+#define ITSDK_SX1276_DIO_5_BANK	 	 		__BANK_A					   // SX1276 GPIO 5 => Mode Ready / Clk out
+#define ITSDK_SX1276_DIO_5_PIN	 	 		__LP_GPIO_4
+#define ITSDK_MURATA_ANTSW_RX_BANK 	     	__BANK_A					   // MURATA ANTENNA SWITCH RX
+#define ITSDK_MURATA_ANTSW_RX_PIN	     	__LP_GPIO_1
+#define ITSDK_MURATA_ANTSW_TXBOOST_BANK  	__BANK_C					   // MURATA TX POWER BOOST
+#define ITSDK_MURATA_ANTSW_TXBOOST_PIN	 	__LP_GPIO_1
+#define ITSDK_MURATA_ANTSW_TXRFO_BANK    	__BANK_C					   // MURATA TX RFO
+#define ITSDK_MURATA_ANTSW_TXRFO_PIN	 	__LP_GPIO_2
+
+#define ITSDK_SIGFOX_EXTENSIONS				__SIGFOX_NONE				   // Murata sigfox lib does not support Monarch
+#endif																	   // Corresponding Interrupts needs to
+																		   // have an interrupt handler configured.
+																		   // EXTI activated for Pins in CubeMW for STM32
+																		   // And corresponding PIN add in the Low level Handler (stm32L...it.c)
+
+#endif // __SIGFOX_SX1276
+// +-------------SX126X------------|--------------------------------------|---------------------------------------|
+#if ITSDK_SIGFOX_LIB == __SIGFOX_SX126X
+#define ITSDK_SFX_SX126X_CHIP		__E5WL							  	   // version of the semtech core chip __SX1261 or __SX1262 or __E5WL
+#define ITSDK_SFX_SX126X_MODULE		__SX126X_MOD_LORAE5					   // module reference for module / board specific conde & config
+#define ITSDK_SFX_SX1262_REGULOR    __POWER_DCDC						   // type of power regulator used
+#define ITSDK_SFX_SX126X_TMBASE		11									   // on Timer identification, add a base to avoid potential conflicts
+#define ITSDK_SFX_SX126X_LATENCYMS	0									   // Latency to be compensated due to MCU wake up time & timer implementation
+#define ITSDK_SFX_SX126X_NVMUPD		4									   // The NVM flash will be updated on every ITSDK_SFX_SX126X_NVMUPD message to preserve the flash 1 to disable
+
+#define ITSDK_SFX_SX126X_SPI		hsubghz								   // SPI To BE USED
+#define ITSDK_SFX_SX126X_CS_BANK	__BANK_A							   // SPI Chip Select when active HIGH
+#define ITSDK_SFX_SX126X_CS_PIN		__LP_GPIO_NONE						   //     Use __LP_GPIO_NONE if not used
+#define ITSDK_SFX_SX126X_CSDN_BANK	__BANK_A							   // SPI Chip Select when active LOW
+#define ITSDK_SFX_SX126X_CSDN_PIN	__LP_GPIO_NONE						   //     Use __LP_GPIO_NONE if not used
+
+#define ITSDK_SFX_SX126X_TCXO_SXCTL __DISABLE							   // TCXO Control, set to __ENABLE when the TCXO is controlled by the SX126X DIO3 pin
+																		   //    in this situation, the expected voltage is to be set on the following param
+																		   //    LORA-E5 module have TCXO as HSA, no sx radio chip controlled
+#define ITSDK_SFX_SX126X_TCXO_STIKS	0									   // TCXO Startup time in tics 0 if always on or TCXO Control is not SX126x
+																		   //    LORA-E5 module have TCXO as HSE, always on
+#define ITSDK_SFX_SX126X_TCXO_PWR	33									   // TCXO Voltage 16 for 1.6V, 16-18 22,24,27,30,33 value accepted
+																		   // LORA-E5 module power TCXO from PB0 with VDD
+#define ITSDK_SFX_SX126X_TCXO_BANK	__BANK_A							   // TCXO Power Pin, let sure it stays on when main clock
+#define ITSDK_SFX_SX126X_TCXO_PIN	__LP_GPIO_NONE						   // LoRa E5 module - GPIOB_0
+
+#define ITSDK_SFX_SX126X_PA_SELECT  __SX126X_PA_HP					   		// Type of power amplifier to be selected, seeed E5 = HP only
+#define ITSDK_SFX_SX126X_PA_DC_OVR	__AVOID								   // Force paDutyCycle value if != __AVOID
+#define ITSDK_SFX_SX126X_PA_HPM_OVR __AVOID								   // Force hpMax value if != __AVOID
+
+#define ITSDK_SFX_SX126X_RFSW1_BANK	__BANK_A							   // Pin used for RF switch control, depend on board and behavior
+#define ITSDK_SFX_SX126X_RFSW1_PIN	__LP_GPIO_4							   // LoRa E5 module - GPIOA_4
+
+#define ITSDK_SFX_SX126X_RFSW2_BANK	__BANK_A							   // Second Pin
+#define ITSDK_SFX_SX126X_RFSW2_PIN	__LP_GPIO_5							   // LoRa E5 module - GPIOA_5
+
+#define ITSDK_SFX_IRQ_BANK	 		__BANK_A					   		   // TX & RX complete IRQ pin
+#define ITSDK_SFX_IRQ_PIN	 	 	__LP_GPIO_NONE						   // set to None whan the SUBGHZ IRQ is in use with STM32WL
+
+#endif // __SIGFOX_SX126X
+// +-------------OTHERS------------|--------------------------------------|---------------------------------------|
+
+#endif /* IT_SDK_CONFIG_SIGFOX_H_ */
+
