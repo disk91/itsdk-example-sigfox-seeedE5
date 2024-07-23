@@ -68,7 +68,7 @@ sdk.sigfox.initialPac : [0000000000000000]
 sdk.sigfox.deviceId : 00D206AF 
 sdk.sigfox.rssiCal : 0
 OK
-``` 
+```
 
 Save your setup
 ```
