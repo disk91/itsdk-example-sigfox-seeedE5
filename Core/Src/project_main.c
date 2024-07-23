@@ -38,22 +38,24 @@ void task() {
 	static uint16_t counter = 299;
 	static uint8_t bytes[4] = { 0x00, 0x00, 0x00, 0x00 };
 	static uint8_t down[8];
-	int16_t t = adc_getTemperature();
-	log_debug("Temp : %d\r\n",t);
-	uint16_t v = adc_getVdd();
-	log_debug("Volt : %d\r\n",v);
-
-	bytes[0] = (t & 0xFF00) >> 8;
-	bytes[1] = t & 0xFF;
-	bytes[2] = (v & 0xFF00) >> 8;
-	bytes[3] = v & 0xFF;
 
 	// make the board led blinking
 	gpio_toggle(__BANK_B, LED_Pin);
 
 	// fire a Sigfox communication on every 10 minutes
 	if ( counter == 300 ) {
+		log_info("Fire Sigfox message\r\n");
 		counter = 0;
+
+		int16_t t = adc_getTemperature();
+		log_debug("Temp : %d\r\n",t);
+		uint16_t v = adc_getVdd();
+		log_debug("Volt : %d\r\n",v);
+
+		bytes[0] = (t & 0xFF00) >> 8;
+		bytes[1] = t & 0xFF;
+		bytes[2] = (v & 0xFF00) >> 8;
+		bytes[3] = v & 0xFF;
 
 		itdsk_sigfox_txrx_t ret = itsdk_sigfox_sendFrame(
 				bytes,						// data buffer containing the temperature and the MCU voltage
