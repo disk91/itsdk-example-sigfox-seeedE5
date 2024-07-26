@@ -52,7 +52,7 @@
 #define ITSDK_WITH_RTC				__RTC_ENABLED							// The Rtc is usd in the firmware
 #define ITSDK_WITH_CLK_ADJUST		__ENABLE								// The RTC (and wtachdog) is calibrated
 #define ITSDK_RTC_CLKFREQ			32768									// RTC clock source frequency
-#define ITSDK_CLK_BEST_SOURCE		__CLK_BEST_SRC_RTC						// The RTC is the most accurate clk source to ADJUST Others
+#define ITSDK_CLK_BEST_SOURCE		__CLK_BEST_SRC_CLK						// The CLK with TCXO is the most accurate clk source to ADJUST Others
 #define ITSDK_CLK_CORRECTION		1000									// correct clock with 1200 o/oo (+20%) of the ticks (used when clk_adjust = 0 or for RTC when CLK_BEST_SRC_RTC)
 #define ITSDK_WITH_ADC				__ADC_ENABLED							// Use of Adc (includes the structures)
 #define ITSDK_ADC_OPTIMIZE_SIZE		__DISABLE								// When __ENABLE adc code is optimized for code size (when relevant)
@@ -68,10 +68,10 @@
 #define ITSDK_WITH_I2C				__I2C_NONE								// I2C is enabled (__I2C_NONE / __I2C_ENABLED )
 #define ITSDK_I2C_HANDLER_TYPE												//    The name of the I2C structure to be used for the targeted MCU
 #define ITSDK_I2C_TIMEOUT			100										//    I2C transaction timeout in ms
-#define ITSDK_WITH_HW_TIMER			__TIMER_NONE							// Use Hardware Timer
-#define ITSDK_HW_TIMER1_HANDLE		htim21									// Timer handler to be used as primary timer
-#define ITSDK_HW_TIMER1_ID			21										// Timer hardware 1 - id/name
-#define ITSDK_HW_TIMER1_FREQ		32000000								// Primary timer base frequency
+#define ITSDK_WITH_HW_TIMER			__TIMER_ENABLED							// Use Hardware Timer
+#define ITSDK_HW_TIMER1_HANDLE		htim1									// Timer handler to be used as primary timer
+#define ITSDK_HW_TIMER1_ID			1										// Timer hardware 1 - id/name
+#define ITSDK_HW_TIMER1_FREQ		16000000								// Primary timer base frequency
 #define ITSDK_HW_TIMER1_MAX			65536									// Timer's counter max value ( 2^size )
 #define ITSDK_TIMER_SLOTS			5										// Maximum number of SOFT TIMER available in parallel - 0 disable SOFT TIMER code
 #define ITSDK_WITH_WDG				__WDG_IWDG								// Enable Watchdog type iWDG

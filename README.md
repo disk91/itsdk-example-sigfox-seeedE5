@@ -53,6 +53,8 @@ SC:D:00D206AF				# setup ID
 OK
 
 ```
+In case you get KO when copy/pasting the setup lines, add a character delay around 0.1s, il will work better
+
 
 Now you can watch the pending configuration by typing C command (Upper Case)
 ``` 

@@ -53,7 +53,7 @@
   									  | __PAYLOAD_ENCRYPT_AESCTR 		\
 									  | __PAYLOAD_ENCRYPT_SPECK 		\
 								/*	  | __PAYLOAD_ENCRYPT_SIGFOX   */   \
-									)										// Encryption code activated
+									)										// Encryption code activated (open source sigfox lib does not support encryption)
 
 #define ITSDK_SIGFOX_MEM_SIZE		256										// Static memory allocated to sigfox
 #define ITSDK_SIGFOX_NVM_SOURCE		__SFX_NVM_LOCALEPROM					// where the non volatile information are stored
@@ -61,7 +61,7 @@
 
 #define ITSDK_SIGFOX_NVM_BASEADDR	0x600									// Base address in the NVM for sigfox lib
 #define ITSDK_SIGFOX_NVM_IDBASEADDR	0x200									// Base address in the NVM for EncUtils lib
-#define ITSDK_SIGFOX_LOWPOWER		0										// When 1 the device can be switch to low power by the sigfox lib
+#define ITSDK_SIGFOX_LOWPOWER		1										// When 1 the device can be switch to low power by the sigfox lib
 #define ITSDK_SIGFOX_ID				0x01020304								// The device ID when NVM_SOURCE is HEADERS
 #define ITSDK_SIGFOX_PAC			{ 0x00, 0x00, 0x00, 0x00, \
 									  0x00, 0x00, 0x00, 0x00 }				// The device PAC when NVM_SOURCE is HEADERS
@@ -193,6 +193,7 @@
 #define ITSDK_SFX_SX1262_REGULOR    __POWER_DCDC						   // type of power regulator used
 #define ITSDK_SFX_SX126X_TMBASE		11									   // on Timer identification, add a base to avoid potential conflicts
 #define ITSDK_SFX_SX126X_LATENCYMS	0									   // Latency to be compensated due to MCU wake up time & timer implementation
+#define ITSDK_SFX_SX126X_RXWINEXT	500								   	   // Extends the downlink windows reception period (to compensate rtc drift during transmission)
 #define ITSDK_SFX_SX126X_NVMUPD		4									   // The NVM flash will be updated on every ITSDK_SFX_SX126X_NVMUPD message to preserve the flash 1 to disable
 
 #define ITSDK_SFX_SX126X_SPI		hsubghz								   // SPI To BE USED

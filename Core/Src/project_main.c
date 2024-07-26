@@ -69,10 +69,17 @@ void task() {
 		);
 
 		if ( ret == SIGFOX_TXRX_DOWLINK_RECEIVED ) {
-			log_info("Received downlink with value [%02X,%02X,%02X,%02X,%02X,%02X,%02X,%02X]",
+			log_info("Message sent, Received downlink with value [%02X,%02X,%02X,%02X,%02X,%02X,%02X,%02X]\r\n",
 					down[0],down[1],down[2],down[3],
 					down[4],down[5],down[6],down[7]
 			);
+			int16_t rssi=0;
+			itsdk_sigfox_getLastRssi(&rssi);
+			log_info("Rssi %d dBm\r\n",rssi);
+		} else if ( ret != SIGFOX_TRANSMIT_SUCESS && ret != SIGFOX_TXRX_NO_DOWNLINK ) {
+			log_info("Failed to transmit message\r\n");
+		} else {
+			log_info("Message sent, no downlink response\r\n");
 		}
 
 
